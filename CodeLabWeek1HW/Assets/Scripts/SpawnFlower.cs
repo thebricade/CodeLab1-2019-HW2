@@ -8,12 +8,14 @@ public class SpawnFlower : MonoBehaviour
     public GameObject currentPlayer;
     public float playerX;
     public float playerY; 
+    public int limitSpawn;
     
     // Start is called before the first frame update
     void Start()
     {
         currentPlayer = GameObject.FindWithTag("Player");
         InvokeRepeating("Spawn",1,1);
+        limitSpawn = 0; 
         
     }
 
@@ -21,12 +23,19 @@ public class SpawnFlower : MonoBehaviour
     void Update()
     {
         checkScore();
+        
     }
 
     void Spawn()
     {
-        GameObject newFlower = Instantiate(Resources.Load<GameObject>("Prefabs/Flower"));
-        newFlower.transform.position = new Vector2(Random.Range(-10,10),Random.Range(-5,5));
+        if (limitSpawn <= 10)
+        {
+            GameObject newFlower = Instantiate(Resources.Load<GameObject>("Prefabs/Flower"));
+            newFlower.transform.position = new Vector2(Random.Range(-10,10),Random.Range(-5,5));
+            limitSpawn++; 
+            Debug.Log("amount of flowers" + limitSpawn);
+        }
+        
        
     }
 
@@ -38,11 +47,12 @@ public class SpawnFlower : MonoBehaviour
             playerY = currentPlayer.transform.position.y;
             Invoke("SpawnDeathFlowers",0.5f);
             Destroy(currentPlayer);
-            //object.Destroy(GameObject.FindWithTag("Player"));
+           // object.Destroy(GameObject.FindWithTag("Player"));
             score = 0;
             Invoke("SpawnPlayer", 5);
-        }
+            
     }
+             }
 
     void SpawnPlayer()
     {
